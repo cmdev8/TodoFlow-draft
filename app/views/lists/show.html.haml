@@ -1,0 +1,22 @@
+.row
+  .col-md-12
+    %h1= @list.title
+
+.row
+  .col-md-12
+    .panel.panel-default
+      .panel-body
+
+        - @list.list_items.done.order("done_at desc").each do |item|
+          %h4= item.content
+          
+          %span.glyphicon.glyphicon-calendar
+          =item.done_at.strftime("%b %d")
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          %span.glyphicon.glyphicon-time
+          =item.elapsed_minutes
+          = " min"
+          %hr
+
+
+

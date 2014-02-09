@@ -1,0 +1,40 @@
+%div{class: "top-list-item-#{list_item.id}", style: "padding-bottom:10px;"}
+  .label.label-default{class: "label-#{list_item.list.color}"}
+    = list_item.list.title
+  
+  = "&nbsp;".html_safe
+
+  - if list_item.started?
+    %div{ class: "btn btn-default btn-xs timer-start-button timer-start-#{list_item.id} ", data: {item_id: list_item.id}, style: "display: #{list_item.timer_started? ? 'none': ''}"}
+      %span.glyphicon.glyphicon-play-circle 
+      Timer
+
+    %div{ class: "btn btn-danger btn-xs timer-stop-button timer-stop-#{list_item.id} ", data: {item_id: list_item.id}, style: "display: #{list_item.timer_started? ? '': 'none'}" }
+      %span.glyphicon.glyphicon-pause 
+      Timer
+
+
+    %div{ class: "btn btn-default btn-xs task-done-button", data: {item_id: list_item.id, list_id: list_item.list.id} }
+      %span.glyphicon.glyphicon-ok 
+      Done
+
+  - else
+    %div{ class: "btn btn-default btn-xs start-button ", data: {item_id: list_item.id} }
+      %span.glyphicon.glyphicon-play 
+      Work
+
+  - if list_item.expired?
+    %span.text-danger
+      %strong
+        = " #{time_ago_in_words(list_item.deadline_at)} ago"
+    %span.text-muted
+      = list_item.content
+
+  - elsif list_item.coming?
+    %strong
+      = " #{time_ago_in_words(list_item.deadline_at)} "
+    %span.text-muted
+      = list_item.content
+
+  - else
+    = list_item.content

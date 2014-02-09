@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  list_id: 
+  content: MyText
+  deadline_at: 2014-02-03 18:44:00
+  done_at: 2014-02-03 18:44:00
+
+two:
+  list_id: 
+  content: MyText
+  deadline_at: 2014-02-03 18:44:00
+  done_at: 2014-02-03 18:44:00

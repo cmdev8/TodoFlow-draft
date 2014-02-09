@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  minutes: 1
+  started_at: 2014-02-04 12:52:25
+  list_item_id: 
+
+two:
+  minutes: 1
+  started_at: 2014-02-04 12:52:25
+  list_item_id: 

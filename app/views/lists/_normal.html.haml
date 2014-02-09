@@ -1,0 +1,50 @@
+.panel.panel-default
+  .panel-heading
+    .label.label-default.new-task-button{class: "label-#{list.color}", data: {list_id: list.id}, style: "cursor:pointer;"}
+      %span.glyphicon.glyphicon-plus
+
+    = "&nbsp;".html_safe + link_to(list.title, list_path(list), style: "color: black;")
+  .panel-body
+    .my-list
+      %ul.my-ul
+        %li.my-li
+          .new-task-form{id: "new_task_form_#{list.id}", style: "display: none;"}
+            .form-group
+              = text_field_tag "content", "", class: "form-control", id: "new_task_content_#{list.id}", placeholder: "Task content"
+            .form-group
+              = button_tag "save", data: {list_id: list.id}, class: "new-task-submit-button btn btn-success btn-block"
+
+        - list.list_items.order_by_created_at.not_done.each do |item|
+          %li.my-li
+            .btn-group
+              %button.btn.btn-xs.btn-default.dropdown-toggle{data:{toggle:"dropdown"}}
+                %span.glyphicon.glyphicon-th-list
+                %span.caret
+              %ul.dropdown-menu{data: {role: "menu"}}
+                %li
+                  - deadline_text = "<span class='glyphicon glyphicon-time'></span> Deadline".html_safe
+                  = link_to deadline_text, "#", class: "deadline-button", data: {list_id: list.id, item_id: item.id}
+                %li
+                  - start_text = "<span class='glyphicon glyphicon-play'></span> Start".html_safe
+                  = link_to start_text, "#", class: "start-button", data: {list_id: list.id, item_id: item.id}
+
+                %li
+                  - done_text = "<span class='glyphicon glyphicon-ok'></span> Done".html_safe
+                  = link_to done_text, "#", data: {list_id: list.id, item_id: item.id}, class: "task-done-button"
+            %div{id: "list_item_deadline_#{item.id}", style: "margin-top: 5px; display:none;"}
+              .panel.panel-default
+                .panel-body
+                  = text_field_tag "deadline", item.deadline_at.to_s[0..9], class: "textarea form-control datepicker", style: "width: 150px; float: left; margin-right: 10px;"
+                  = button_tag "save", data: {item_id: item.id}, class: "task-deadline-submit-button btn btn-success"
+            - if item.deadline_set?
+              - if item.expiring_today?
+                %span.badge= "today"
+              - elsif !item.expired?
+                %span.badge{style: "background-color:#9DE0FF;color:#0F6698;"}= distance_of_time_in_words_to_now(item.deadline_at)
+              - else
+                %span.badge{style: "background-color:#E64E3A;"}= "#{distance_of_time_in_words_to_now(item.deadline_at)} ago"
+
+            = item.content
+
+
+

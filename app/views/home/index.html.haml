@@ -1,0 +1,69 @@
+.row
+  .col-md-12
+    .pull-right
+      %h1
+        %span.glyphicon.glyphicon-calendar
+        = Time.zone.now.strftime("%d %B")
+.row
+  .col-md-12
+    = "&nbsp;".html_safe
+
+.row
+  .col-md-12
+    .my-panel
+      %h2 Today
+
+      - ongoing_ids = []
+      - deadline_ids = []
+
+      - if @ongoing_tasks.any?
+        %h4 Ongoing
+        - ongoing_ids = @ongoing_tasks.load.map(&:id)
+        - @ongoing_tasks.each do |list_item|
+          = render "list_items/full", list_item: list_item
+
+      - if @today_tasks.any?
+        %h4 Deadline
+        - deadline_ids = @today_tasks.load.map(&:id)
+        - @today_tasks.each do |list_item|
+          - unless ongoing_ids.include? list_item.id
+            = render "list_items/full", list_item: list_item
+      
+      - if !@today_tasks.any? and !@ongoing_tasks.any?
+        .alert.alert-success
+          Done :)
+
+      - if @coming_tasks.any?
+        %h4 Coming
+        - @coming_tasks.each do |list_item|
+          = render "list_items/full", list_item: list_item
+
+.row
+  .col-md-12
+    .my-panel
+      .row
+        .col-md-10
+          %h2 Lists
+        .col-md-2
+          .pull-right
+            = link_to "<span class='glyphicon glyphicon-plus'></span> New list".html_safe, new_list_path, class:"btn btn-default btn-xs"
+
+      .row
+        - if @lists.any?
+          - item_per_col = (@lists.count / 3.0).ceil
+          - list_array = @lists.load.to_a
+
+          - (0..3).each do |i|
+            .col-md-4
+              - offset = i*item_per_col
+              - col_number = offset+item_per_col-1
+
+              - list_array[offset..col_number].try(:each) do |list|
+                %div{id: "list-#{list.id}", style: ""}
+                  = render "lists/normal", list: list
+        - else
+          .col-md-12
+            .text-muted
+              No list found!
+
+
